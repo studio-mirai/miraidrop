@@ -2,17 +2,23 @@ module miraidrop::miraidrop;
 
 use std::string::String;
 use std::type_name::{Self};
+use std::u64::{Self};
 
 use sui::event;
 use sui::linked_table::{Self, LinkedTable};
 use sui::balance::{Self, Balance};
 use sui::coin::{Self, Coin};
 
-public struct MiraiDrop<phantom T> has key, store {
+public struct MiraiDrop<phantom T> has key {
     id: UID,
+    // Coin balance to airdrop.
     balance: Balance<T>,
+    // Total balance allocated to recipients.
     balance_allocated: u64,
+    // Whether the airdrop has been initialized.
+    // Recipients and balances can't be modified after initialization.
     is_initialized: bool,
+    // Recipients and their allocated balances.
     recipients: LinkedTable<address, u64>,
 }
 
@@ -47,6 +53,7 @@ public fun deposit<T: drop>(
     coin: Coin<T>,
 ) {
     assert!(miraidrop.is_initialized == false, 1);
+
     miraidrop.balance.join(coin.into_balance());
 }
 
@@ -82,6 +89,7 @@ public fun add_recipient<T: drop>(
     miraidrop.balance_allocated = miraidrop.balance_allocated + amount;
 }
 
+// Remove a specific recipient, and return the allocated balance as a coin.
 public fun remove_recipient<T: drop>(
     miraidrop: &mut MiraiDrop<T>,
     recipient: address,
@@ -94,6 +102,32 @@ public fun remove_recipient<T: drop>(
 
     let balance = miraidrop.balance.split(amount);
     let coin = coin::from_balance(balance, ctx);
+
+    coin
+}
+
+// Batch remove multiple recipients, and return the aggregated balance as a coin.
+public fun remove_recipients<T: drop>(
+    miraidrop: &mut MiraiDrop<T>,
+    mut batch_size: u64,
+    ctx: &mut TxContext,
+): Coin<T> {
+    batch_size = u64::min(batch_size, miraidrop.recipients.length());
+    
+    let mut withdraw_balance = balance::zero<T>();
+
+    let mut i = 0;
+    while (i < batch_size) {
+        let (_, amount) = miraidrop.recipients.pop_back();
+        miraidrop.balance_allocated = miraidrop.balance_allocated - amount;
+
+        let balance = miraidrop.balance.split(amount);
+        withdraw_balance.join(balance);
+
+        i = i + 1;
+    };
+
+    let coin = coin::from_balance(withdraw_balance, ctx);
 
     coin
 }
@@ -116,6 +150,7 @@ public fun destroy_empty<T: drop>(
     recipients.destroy_empty();
 }
 
+// Batch execute airdrop to multiple recipients.
 public fun execute<T: drop>(
     miraidrop: &mut MiraiDrop<T>,
     mut batch_size: u64,
@@ -123,9 +158,7 @@ public fun execute<T: drop>(
 ) {
     assert!(miraidrop.is_initialized == true, 1);
 
-    if (batch_size > miraidrop.recipients.length()) {
-        batch_size = miraidrop.recipients.length();
-    };
+    batch_size = u64::min(batch_size, miraidrop.recipients.length());
 
     let mut i = 0;
     while (i < batch_size) {
