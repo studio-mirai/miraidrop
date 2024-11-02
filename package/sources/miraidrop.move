@@ -99,25 +99,6 @@ public fun withdraw_all<T: drop>(
     coin
 }
 
-// Initialize the airdrop. After initialization, the airdrop balance can't be modified.
-public fun initialize<T: drop>(
-    miraidrop: &mut MiraiDrop<T>,
-) {
-    assert!(miraidrop.balance.value() == miraidrop.balance_allocated, 1);
-    
-    miraidrop.lifecycle.is_initialized = true;
-}
-
-// Uninitialize the airdrop. Can only be called before the airdrop execution starts.
-public fun uninitialize<T: drop>(
-    miraidrop: &mut MiraiDrop<T>,
-) {
-    assert!(miraidrop.lifecycle.is_initialized == true, 1);
-    assert!(miraidrop.lifecycle.is_execution_started == false, 2);
-
-    miraidrop.lifecycle.is_initialized = false;
-}
-
 // Add a recipient to the airdrop.
 public fun add_recipient<T: drop>(
     miraidrop: &mut MiraiDrop<T>,
@@ -171,6 +152,26 @@ public fun remove_recipients<T: drop>(
     let coin = coin::from_balance(withdraw_balance, ctx);
 
     coin
+}
+
+// Initialize the airdrop. After initialization, the airdrop balance can't be modified.
+public fun initialize<T: drop>(
+    miraidrop: &mut MiraiDrop<T>,
+) {
+    assert!(miraidrop.lifecycle.is_initialized == false, 1);
+    assert!(miraidrop.balance.value() == miraidrop.balance_allocated, 1);
+    
+    miraidrop.lifecycle.is_initialized = true;
+}
+
+// Uninitialize the airdrop. Can only be called before the airdrop execution starts.
+public fun uninitialize<T: drop>(
+    miraidrop: &mut MiraiDrop<T>,
+) {
+    assert!(miraidrop.lifecycle.is_initialized == true, 1);
+    assert!(miraidrop.lifecycle.is_execution_started == false, 2);
+
+    miraidrop.lifecycle.is_initialized = false;
 }
 
 // Destory MiraiDrop object after airdrop execution.
