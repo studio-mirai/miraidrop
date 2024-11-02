@@ -1,3 +1,6 @@
+// Copyright (c) Studio Mirai, Inc.
+// SPDX-License-Identifier: MIT
+
 module miraidrop::miraidrop;
 
 use std::string::String;
