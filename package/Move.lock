@@ -34,7 +34,7 @@ latest-published-id = "0x72aca0c40ddc19f3306cda66b9b90e8d105de9ddc4aa5c67282e698
 published-version = "1"
 
 [env.mirainet]
-chain-id = "8a81cbfb"
-original-published-id = "0x106f04f0367715f18c4caac781c582a463f8a23fd7dd7a6e34bb5bd758c6b8c4"
-latest-published-id = "0x106f04f0367715f18c4caac781c582a463f8a23fd7dd7a6e34bb5bd758c6b8c4"
+chain-id = "86247362"
+original-published-id = "0xa36640ade5c8fcdeff8dd29be4b96f45e689439ef2afff27ef950390a73317ad"
+latest-published-id = "0xa36640ade5c8fcdeff8dd29be4b96f45e689439ef2afff27ef950390a73317ad"
 published-version = "1"

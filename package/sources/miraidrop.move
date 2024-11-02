@@ -40,10 +40,6 @@ public struct DepositEvent has copy, drop {
     amount: u64,
 }
 
-public struct DestroyedEvent has copy, drop {
-    miraidrop_id: ID,
-}
-
 public struct InitializeEvent has copy, drop {
     miraidrop_id: ID,
 }
@@ -366,5 +362,5 @@ public fun execute<T: drop>(
 public fun id<T: drop>(
     miraidrop: &MiraiDrop<T>,
 ): ID {
-    miraidrop.id()
+    object::id(miraidrop)
 }
