@@ -2,6 +2,7 @@
 name = "miraidrop"
 edition = "2024.beta"
 license = "MIT"
+published-at = "0x29c2f3baf530822f438ce2f2b3f1c009de34c07ea1b781c3eb45bb81c387e2d5"
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/mainnet" }
