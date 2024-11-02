@@ -11,7 +11,7 @@ fi
 RESULT=$(sui client ptb \
     --move-call $MIRAIDROP_PACKAGE_ID::miraidrop::new $COIN_TYPE \
     --assign result \
-    --transfer-objects [result] @$(sui client active-address) \
+    --move-call $MIRAIDROP_PACKAGE_ID::miraidrop::transfer "<$MIRAIDROP_PACKAGE_ID::miraidrop::MiraiDrop<$COIN_TYPE>>" result @$(sui client active-address) \
     --gas-budget 100000000 \
     --json)
 

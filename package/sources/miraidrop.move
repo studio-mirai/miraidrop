@@ -9,7 +9,7 @@ use sui::linked_table::{Self, LinkedTable};
 use sui::balance::{Self, Balance};
 use sui::coin::{Self, Coin};
 
-public struct MiraiDrop<phantom T> has key, store {
+public struct MiraiDrop<phantom T> has key {
     id: UID,
     // Coin balance to airdrop.
     balance: Balance<T>,
@@ -357,6 +357,13 @@ public fun execute<T: drop>(
     if (miraidrop.recipients.length() == 0) {
         miraidrop.lifecycle.is_execution_completed = true;
     };
+}
+
+public fun transfer<T: drop>(
+    miraidrop: MiraiDrop<T>,
+    recipient: address,
+) {
+    transfer::transfer(miraidrop, recipient);
 }
 
 public fun id<T: drop>(
