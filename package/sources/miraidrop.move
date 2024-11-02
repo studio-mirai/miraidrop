@@ -83,9 +83,9 @@ const EExecutionStarted: u64 = 5;
 const EExecuteIncomplete: u64 = 6;
 
 // Create a new airdrop. Requires a coin/balance type to be specified.
-public fun new<T: drop>(
+entry fun new<T: drop>(
     ctx: &mut TxContext,
-): MiraiDrop<T> {
+) {
     let lifecycle = Lifecycle {
         is_initialized: false,
         is_execution_started: false,
@@ -107,7 +107,7 @@ public fun new<T: drop>(
         }
     );
 
-    miraidrop
+    transfer::transfer(miraidrop, ctx.sender());
 }
 
 // Add funds to the airdrop balance.
@@ -360,13 +360,6 @@ public fun execute<T: drop>(
     if (miraidrop.recipients.length() == 0) {
         miraidrop.lifecycle.is_execution_completed = true;
     };
-}
-
-public fun transfer<T: drop>(
-    miraidrop: MiraiDrop<T>,
-    recipient: address,
-) {
-    transfer::transfer(miraidrop, recipient);
 }
 
 public fun id<T: drop>(
