@@ -12,6 +12,6 @@ get_miraidrop_type() {
 MIRAIDROP_TYPE=$(get_miraidrop_type $MIRAIDROP_ID)
 
 sui client ptb \
-    --move-call $PACKAGE_ID::miraidrop::add_recipient "<$MIRAIDROP_TYPE>" @$MIRAIDROP_ID @$RECIPIENT $AMOUNT \
+    --move-call $MIRAIDROP_PACKAGE_ID::miraidrop::add_recipient "<$MIRAIDROP_TYPE>" @$MIRAIDROP_ID @$RECIPIENT $AMOUNT \
     --gas-budget 100000000 \
     --json

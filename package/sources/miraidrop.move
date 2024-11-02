@@ -9,7 +9,7 @@ use sui::linked_table::{Self, LinkedTable};
 use sui::balance::{Self, Balance};
 use sui::coin::{Self, Coin};
 
-public struct MiraiDrop<phantom T> has key {
+public struct MiraiDrop<phantom T> has key, store {
     id: UID,
     // Coin balance to airdrop.
     balance: Balance<T>,
@@ -59,6 +59,19 @@ public fun deposit<T: drop>(
 
 public fun withdraw<T: drop>(
     miraidrop: &mut MiraiDrop<T>,
+    amount: u64,
+    ctx: &mut TxContext,
+): Coin<T> {
+    assert!(miraidrop.is_initialized == false, 1);
+
+    let balance = miraidrop.balance.split(amount);
+    let coin = coin::from_balance(balance, ctx);
+
+    coin
+}
+
+public fun withdraw_all<T: drop>(
+    miraidrop: &mut MiraiDrop<T>,
     ctx: &mut TxContext,
 ): Coin<T> {
     assert!(miraidrop.is_initialized == false, 1);
@@ -83,7 +96,6 @@ public fun add_recipient<T: drop>(
     amount: u64,
 ) {
     assert!(!miraidrop.recipients.contains(recipient), 1);
-    assert!(miraidrop.balance_allocated + amount <= miraidrop.balance.value(), 2);
 
     miraidrop.recipients.push_back(recipient, amount);
     miraidrop.balance_allocated = miraidrop.balance_allocated + amount;
