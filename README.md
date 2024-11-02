@@ -11,13 +11,13 @@ MiraiDrop includes a variety of Bash scripts which require the official Sui clie
 ### Create an Airdrop
 
 ```
-bash scripts/create.sh "0x2::sui::SUI"
+bash scripts/create.sh <COIN_TYPE> # e.g. "0x2::sui::SUI"
 ```
 
 ### Add Airdrop Recipients
 
 ```
-bash scripts/addRecipients.sh <MIRAIDROP_ID> <CSV_FILE>
+bash scripts/addRecipients.sh <MIRAIDROP_ID> <CSV_FILE> # e.g. /Users/studio-mirai/miraidrop/airdrop.csv
 ```
 
 ### Deposit Funds
