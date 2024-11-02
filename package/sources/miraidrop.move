@@ -120,7 +120,7 @@ public fun deposit<T: drop>(
 
     event::emit(
         DepositEvent {
-            miraidrop_id: object::id(miraidrop),
+            miraidrop_id: miraidrop.id(),
             amount: coin.value(),
         }
     );
@@ -141,7 +141,7 @@ public fun withdraw<T: drop>(
 
     event::emit(
         WithdrawEvent {
-            miraidrop_id: object::id(miraidrop),
+            miraidrop_id: miraidrop.id(),
             amount: coin.value(),
         }
     );
@@ -161,7 +161,7 @@ public fun withdraw_all<T: drop>(
 
     event::emit(
         WithdrawEvent {
-            miraidrop_id: object::id(miraidrop),
+            miraidrop_id: miraidrop.id(),
             amount: coin.value(),
         }
     );
@@ -183,7 +183,7 @@ public fun withdraw_excess<T: drop>(
 
     event::emit(
         WithdrawEvent {
-            miraidrop_id: object::id(miraidrop),
+            miraidrop_id: miraidrop.id(),
             amount: coin.value(),
         }
     );
@@ -201,7 +201,7 @@ public fun add_recipient<T: drop>(
 
     event::emit(
         RecipientAddedEvent {
-            miraidrop_id: object::id(miraidrop),
+            miraidrop_id: miraidrop.id(),
             recipient: recipient,
             amount: amount,
         }
@@ -227,7 +227,7 @@ public fun remove_recipient<T: drop>(
 
     event::emit(
         RecipientRemovedEvent {
-            miraidrop_id: object::id(miraidrop),
+            miraidrop_id: miraidrop.id(),
             recipient: recipient,
             amount: coin.value(),
         }
@@ -255,7 +255,7 @@ public fun remove_recipients<T: drop>(
 
         event::emit(
             RecipientRemovedEvent {
-                miraidrop_id: object::id(miraidrop),
+                miraidrop_id: miraidrop.id(),
                 recipient: recipient,
                 amount: balance.value(),
             }
@@ -280,7 +280,7 @@ public fun initialize<T: drop>(
 
     event::emit(
         InitializeEvent {
-            miraidrop_id: object::id(miraidrop),
+            miraidrop_id: miraidrop.id(),
         }
     );
 
@@ -296,7 +296,7 @@ public fun uninitialize<T: drop>(
 
     event::emit(
         UninitializeEvent {
-            miraidrop_id: object::id(miraidrop),
+            miraidrop_id: miraidrop.id(),
         }
     );
 
@@ -347,7 +347,7 @@ public fun execute<T: drop>(
 
         event::emit(
             ExecutedEvent {
-                miraidrop_id: object::id(miraidrop),
+                miraidrop_id: miraidrop.id(),
                 recipient: recipient,
                 amount: coin.value(),
             }
@@ -361,4 +361,10 @@ public fun execute<T: drop>(
     if (miraidrop.recipients.length() == 0) {
         miraidrop.lifecycle.is_execution_completed = true;
     };
+}
+
+public fun id<T: drop>(
+    miraidrop: &MiraiDrop<T>,
+): ID {
+    miraidrop.id()
 }
