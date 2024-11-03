@@ -367,3 +367,39 @@ public fun id<T: drop>(
 ): ID {
     object::id(miraidrop)
 }
+
+public fun balance<T: drop>(
+    miraidrop: &MiraiDrop<T>,
+): &Balance<T> {
+    &miraidrop.balance
+}
+
+public fun balance_allocated<T: drop>(
+    miraidrop: &MiraiDrop<T>,
+): u64 {
+    miraidrop.balance_allocated
+}
+
+public fun is_initialized<T: drop>(
+    miraidrop: &MiraiDrop<T>,
+): bool {
+    miraidrop.lifecycle.is_initialized
+}
+
+public fun is_execution_started<T: drop>(
+    miraidrop: &MiraiDrop<T>,
+): bool {
+    miraidrop.lifecycle.is_execution_started
+}
+
+public fun is_execution_completed<T: drop>(
+    miraidrop: &MiraiDrop<T>,
+): bool {
+    miraidrop.lifecycle.is_execution_completed
+}
+
+public fun recipients<T: drop>(
+    miraidrop: &MiraiDrop<T>,
+): &LinkedTable<address, u64> {
+    &miraidrop.recipients
+}
